@@ -4,7 +4,7 @@ import "./App.css";
 import io from "socket.io-client";
 import ChatWindow from "./component/chat";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://knight-chat-sever.onrender.com");
 
 function App() {
   const [room, setRoom] = useState("");
