@@ -4,7 +4,7 @@ import "./App.css";
 import io from "socket.io-client";
 import ChatWindow from "./component/chat";
 
-const socket = io.connect("https://knight-chat-sever.onrender.com");
+const socket = io.connect("http://localhost:3001");
 
 function App() {
   const [room, setRoom] = useState("");
@@ -17,7 +17,9 @@ function App() {
       alert("enter valid details");
       return;
     }
+
     await socket.emit("join_room", { room });
+
     setChatWindow(true);
   };
 
@@ -65,7 +67,6 @@ function App() {
   useEffect(() => {
     socket.on("receive_message", (msg) => {
       if (room === msg.room) {
-        console.log(msg);
         setMessageHistory((list) => [...list, msg]);
       }
     });
@@ -125,8 +126,10 @@ function App() {
       )}
       {chatWindow && (
         <ChatWindow
+          socket={socket}
           messages={messageHistory}
           sendMessage={sendMessage}
+          room={room}
           username={username}
         />
       )}

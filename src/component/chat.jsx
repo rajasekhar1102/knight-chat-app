@@ -3,11 +3,21 @@ import "../styles/chat.css";
 import Image from "./image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileImage, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
+import { faVideo } from "@fortawesome/free-solid-svg-icons";
+import Video from "./videoWindow";
 
-const ChatWindow = ({ messages, sendMessage, username }) => {
+const ChatWindow = ({ messages, sendMessage, username, socket, room }) => {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState("");
+  const [videoCall, setVideoCall] = useState(false);
   const fileRef = useRef();
+  const [receivingCall, setReceivingCall] = useState(false);
+
+  useEffect(() => {
+    socket.on("receiveCall", () => {
+      setReceivingCall(true);
+    });
+  }, []);
 
   const renderMessage = (msg, index) => {
     if (msg.type === "file/text") {
@@ -61,6 +71,11 @@ const ChatWindow = ({ messages, sendMessage, username }) => {
       <div className="window">
         <div className="chat-header">
           <h3>CHAT LIVE</h3>
+          <button
+            className="send-btn btn btn-primary m-1"
+            onClick={(e) => setVideoCall(true)}>
+            <FontAwesomeIcon icon={faVideo} />
+          </button>
         </div>
         <div className="messages-window">
           <div className="messages">{messages.map(renderMessage)}</div>
@@ -92,6 +107,7 @@ const ChatWindow = ({ messages, sendMessage, username }) => {
             />
             <FontAwesomeIcon icon={faFileImage} />
           </button>
+
           <button
             className="send-btn btn btn-primary m-1"
             onClick={() =>
@@ -100,6 +116,14 @@ const ChatWindow = ({ messages, sendMessage, username }) => {
             <FontAwesomeIcon icon={faPaperPlane} />
           </button>
         </div>
+        {(videoCall || receivingCall) && (
+          <Video
+            callEnd={[setVideoCall, setReceivingCall]}
+            socket={socket}
+            username={username}
+            room={room}
+          />
+        )}
       </div>
     </div>
   );

@@ -30,6 +30,7 @@ padding: 5px;
 .messages-window{
     height: 100%;
     border-radius: 2%;
+    position: relative;
     background-color: aqua;
    display: flex;
    flex-direction: column-reverse;
@@ -106,5 +107,16 @@ border-radius: 20%;
 
 .message .remove-background{
    background: none ;
+}
+
+
+.video-window{
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+left: 0;
+top:0;   
+  
+    backdrop-filter: blur(5px);
 }
 
