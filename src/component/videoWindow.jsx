@@ -18,6 +18,7 @@ const Video = ({ callEnd: stopCall, socket, room, username }) => {
   const connectionRef = useRef();
 
   useEffect(() => {
+    setTimeout(() => {}, 10000);
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
